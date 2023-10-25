@@ -14,6 +14,6 @@ def identify_best_k(funcs, funcs_prime, xs):
     )
 
     # Find the index (k) that corresponds to the minimum value for each func and x
-    min_indices = np.argmin(results, axis=2) # Adding 1 to make the indices in the range [1, 52]
+    min_indices = np.argmin(results, axis=1) # Adding 1 to make the indices in the range [1, 52]
 
     return min_indices
