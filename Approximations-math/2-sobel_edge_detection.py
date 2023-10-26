@@ -3,6 +3,11 @@ import numpy as np
 apply_filter = __import__('1-filter').apply_filter
 
 
+def rescale(np_arr):
+    M = np.max(np_arr)
+    m = np.min(np_arr)
+    return (np_arr - m) / (M - m)
+
 def sobel_edge_detection(A, threshold):
     # Define the Sobel operators for horizontal and vertical gradients
     s_x = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
@@ -17,7 +22,8 @@ def sobel_edge_detection(A, threshold):
     angle = np.arctan2(partial_y, partial_x)
 
     # Rescale the intensity of the gradient
-    intensity = intensity / np.max(intensity)
+    intensity = rescale(intensity)
+    print(intensity)
 
     # Initialize the output B
     m, n = A.shape[0], A.shape[1]
