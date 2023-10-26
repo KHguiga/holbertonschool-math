@@ -12,12 +12,20 @@ def apply_filter(F, i_c, j_c, A):
             k_offset = k_index - i_c  # Offset from the center i_c
             l_offset = l_index - j_c  # Offset from the center j_c
 
-            for i in range(m):
-                for j in range(n):
-                    i_offset = i + k_offset
-                    j_offset = j + l_offset
+            # Loop over the dimensions of A is avoided as per the constraint
+            # Instead, compute the valid indices within A directly
+            i_indices = np.arange(m) + k_offset
+            j_indices = np.arange(n) + l_offset
 
-                    if 0 <= i_offset < m and 0 <= j_offset < n:
-                        result[i, j] += F[k_index, l_index] * A[i_offset, j_offset]
+            # Find the indices that are within the bounds of A
+            valid_i_indices = (i_indices >= 0) & (i_indices < m)
+            valid_j_indices = (j_indices >= 0) & (j_indices < n)
+
+            # Compute the valid indices in both dimensions
+            valid_i_indices = i_indices[valid_i_indices]
+            valid_j_indices = j_indices[valid_j_indices]
+
+            # Use the valid indices to update the result
+            result[valid_i_indices, valid_j_indices] += F[k_index, l_index] * A[valid_i_indices - k_offset, valid_j_indices - l_offset]
 
     return result
